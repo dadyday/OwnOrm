@@ -1,0 +1,72 @@
+OwnOrm\Entity::__set_state(/* #03a0 */ array(
+	'oModel' => OwnOrm\Model::__set_state(/* #5011 */ array(
+		'aEntity' => array(
+			'user' => /* OwnOrm\Entity dumped on line 1 */,
+			'login' => OwnOrm\Entity::__set_state(/* #2752 */ array(
+				'oModel' => /* OwnOrm\Model dumped on line 2 */,
+				'name' => 'login',
+				'aProperty' => array(
+					'user_id' => OwnOrm\Property::__set_state(/* #8189 */ array(
+						'oEntity' => /* OwnOrm\Entity dumped on line 5 */,
+						'name' => 'user_id',
+						'null' => TRUE,
+						'type' => NULL,
+						'length' => 0,
+						'default' => NULL,
+						'related' => 'user',
+					)),
+					'logged' => OwnOrm\Property::__set_state(/* #3f21 */ array(
+						'oEntity' => /* OwnOrm\Entity dumped on line 5 */,
+						'name' => 'logged',
+						'null' => TRUE,
+						'type' => 'string',
+						'length' => 40,
+						'default' => 'now',
+						'related' => NULL,
+					)),
+				),
+				'aIndex' => array(
+					'userlogin' => OwnOrm\Index::__set_state(/* #55cf */ array(
+						'oEntity' => /* OwnOrm\Entity dumped on line 5 */,
+						'name' => 'userlogin',
+						'type' => 'index',
+						'aField' => array(
+							'user_id' => /* OwnOrm\Property dumped on line 9 */,
+							'logged' => /* OwnOrm\Property dumped on line 18 */,
+						),
+					)),
+				),
+			)),
+		),
+		'aRow' => array(),
+	)),
+	'name' => 'user',
+	'aProperty' => array(
+		'name' => OwnOrm\Property::__set_state(/* #aebe */ array(
+			'oEntity' => /* OwnOrm\Entity dumped on line 1 */,
+			'name' => 'name',
+			'null' => FALSE,
+			'type' => 'string',
+			'length' => 30,
+			'default' => 'guest',
+			'related' => NULL,
+		)),
+		'password' => OwnOrm\Property::__set_state(/* #2376 */ array(
+			'oEntity' => /* OwnOrm\Entity dumped on line 1 */,
+			'name' => 'password',
+			'null' => TRUE,
+			'type' => 'string',
+			'length' => 40,
+			'default' => NULL,
+			'related' => NULL,
+		)),
+	),
+	'aIndex' => array(
+		'name' => OwnOrm\Index::__set_state(/* #e7af */ array(
+			'oEntity' => /* OwnOrm\Entity dumped on line 1 */,
+			'name' => 'name',
+			'type' => 'unique',
+			'aField' => array('name' => /* OwnOrm\Property dumped on line 45 */),
+		)),
+	),
+))

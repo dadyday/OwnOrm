@@ -1,0 +1,4 @@
+
+_src/
+vendor/
+tests/*/output

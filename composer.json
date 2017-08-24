@@ -1,0 +1,22 @@
+{
+	"name": "dady/ownorm",
+	"authors": [
+		{
+			"name": "Dady",
+			"email": "dady@coruscant.local"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"OwnOrm\\": "src/"
+		}
+	},
+	"require": {
+		"gabordemooij/redbean": "dev-master",
+		"tracy/tracy": "^2.4",
+		"nette/utils": "^2.4"
+	},
+	"require-dev": {
+		"nette/tester": "^1.7"
+	}
+}
