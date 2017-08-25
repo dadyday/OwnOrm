@@ -16,10 +16,14 @@ class Index {
 		$aField = [];
 
 	function __construct($oEntity, $name, $aCfg = []) {
-		if ($oEntity->findIndex($name)) throw new \Exception("index $oEntity->name::$name already exists");
+		if ($oEntity->findIndex($name)) throw new \Exception("index $oEntity->_name::$name already exists");
 		$this->oEntity = $oEntity;
 		$this->name = $name;
 		$this->config($aCfg);
+	}
+
+	function __toString() {
+		return $this->name;
 	}
 
 	function config(array $aCfg) {

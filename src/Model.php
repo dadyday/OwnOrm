@@ -6,7 +6,7 @@ use Nette;
 /**
  * @property array $entities
  */
-class Model {
+class Model implements \IteratorAggregate, \Countable, \ArrayAccess {
 	use Nette\SmartObject;
 
 	static function create($aCfg = []) {
@@ -18,6 +18,30 @@ class Model {
 
 	function __construct($aCfg = []) {
 		$this->config($aCfg);
+	}
+
+	function getIterator() {
+		return new \ArrayIterator($this->aEntity);
+	}
+
+	function count() {
+		return count($this->aEntity);
+	}
+
+	function offsetExists($offset) {
+		if (is_numeric($offset)) return count($this->aEntity) > $offset;
+		return isset($this->aEntity[$offset]);
+	}
+	function offsetGet($offset) {
+		if (is_numeric($offset)) $offset = array_keys($this->aEntity)[$offset];
+		return $this->aEntity[$offset];
+	}
+	function offsetSet($offset, $value) {
+		throw new \Exception("use createEntity to add");
+	}
+	function offsetUnset($offset) {
+		if (is_numeric($offset)) $offset = array_keys($this->aEntity)[$offset];
+		unset($this->aEntity[$offset]);
 	}
 
 	function config(array $aCfg) {
@@ -37,10 +61,16 @@ class Model {
 		return $this->aEntity;
 	}
 
+	function __get($name) {
+		switch ($name) {
+			case 'entities': return $this->getEntities();
+		}
+		return $this->findEntity($name);
+	}
 
 	function findEntity($name) {
 		if (is_string($name)) ;
-		elseif (is_a($name, __NAMESPACE__.'\Entity')) $name = $name->name;
+		elseif (is_a($name, __NAMESPACE__.'\Entity')) $name = $name->_name;
 		else throw new \Exception('entity must be string or Entity object');
 		return isset($this->aEntity[$name]) ? $this->aEntity[$name] : null;
 	}

@@ -12,7 +12,7 @@ class Entity {
 
 	var
 		$oModel,
-		$name,
+		$_name,
 		$aProperty = [],
 		$aIndex = [],
 		$aIdentity = [];
@@ -20,7 +20,7 @@ class Entity {
 	function __construct($oModel, $name, $aCfg = []) {
 		if ($oModel->findEntity($name)) throw new \Exception("entity $name already exists");
 		$this->oModel = $oModel;
-		$this->name = $name;
+		$this->_name = $name;
 		$this->config($aCfg);
 	}
 
@@ -46,6 +46,18 @@ class Entity {
 			$name = $name->name;
 		}
 		return isset($this->aProperty[$name]) ? $this->aProperty[$name] : null;
+	}
+
+	function __get($name) {
+		switch ($name) {
+			case 'properties': return $this->getProperties();
+			case 'indices': return $this->getIndices();
+		}
+		return $this->findProperty($name);
+	}
+
+	function __toString() {
+		return $this->_name;
 	}
 
 	function createProperty($name, $aCfg = []) {
@@ -102,7 +114,7 @@ class Entity {
 				if (count($aRet >= 3)) break;
 			}
 		}
-		#bdump([$aRet, $this->aIndex], $this->name);
+		#bdump([$aRet, $this->aIndex], $this->_name);
 		return $aRet;
 	}
 
@@ -112,8 +124,8 @@ class Entity {
 
 	function createRelation($entity, $property = null, $aCfg = []) {
 		$oEntity = $this->oModel->findOrCreateEntity($entity, $aCfg);
-		if (empty($property)) $property = $oEntity->name;
-		#$oEntity->findOrCreateProperty($this->name, ['type' => 'list', 'related' => $this]);
+		if (empty($property)) $property = $oEntity->_name;
+		#$oEntity->findOrCreateProperty($this->_name, ['type' => 'list', 'related' => $this]);
 		return $this->findOrCreateProperty($property, ['related' => $oEntity]);
 	}
 }

@@ -16,22 +16,24 @@ use Nette;
 class Property {
 	use Nette\SmartObject;
 
-	public
+	protected
 		$oEntity,
 		$name,
-		$null = true;
-
-	protected
 		$type,
-		$length = 0,
+		$length = null,
 		$default = null,
+		$null = null,
 		$related = null;
 
 	function __construct($oEntity, $name, $aCfg = []) {
-		if ($oEntity->findProperty($name)) throw new \Exception("property $oEntity->name::$name already exists");
+		if ($oEntity->findProperty($name)) throw new \Exception("property $oEntity->_name::$name already exists");
 		$this->oEntity = $oEntity;
 		$this->name = $name;
 		$this->config($aCfg);
+	}
+
+	function __toString() {
+		return $this->name;
 	}
 
 	function __get($name) {
@@ -62,12 +64,12 @@ class Property {
 
 	protected function _initTypeSettings($type) {
 		$t = $l = $d = $n = null;
-		if (preg_match('~^(\D+)(\d+)$~', $type, $aMatch)) {
+		if (preg_match('~^(str\D*)(\d+)$~', $type, $aMatch)) {
 			list(, $t, $l) = $aMatch;
-			$this->type = $t;
+			$this->type = $type = 'string';
 			$this->length = (integer) $l;
 		}
-		else switch ($type) {
+		switch ($type) {
 			case 'bool':
 			case 'boolean': $t = 'boolean'; $l = 0; $d = null; $n = true; break;
 			case 'int':
@@ -81,10 +83,10 @@ class Property {
 			case 'date':
 			case 'time':
 			case 'datetime': $t = $type; $l = 0; $d = null; $n = true; break;
-			case 'ref': $t = 'integer'; $l = 0; $d = null; $n = true; break;
+			case 'ref': $t = 'ref'; $l = 0; $d = null; $n = true; break;
 			case 'list': $t = 'list'; $l = 0; $d = null; $n = true; break;
-			case 'NULL':
 			case 'object':
+			case 'NULL': $t = 'string'; $l = 40; $d = null; $n = true; break;
 				break;
 			default:
 				throw new \Exception("invalid property type $type");
@@ -111,8 +113,9 @@ class Property {
 	}
 
 	function setDefault($value) {
-		$this->_initTypeSettings(gettype($value));
+		if (!$this->type) $this->_initTypeSettings(gettype($value));
 		$this->default = $value;
+		if (is_null($value)) $this->null = true;
 	}
 
 	function setRelated($value) {

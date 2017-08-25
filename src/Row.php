@@ -63,22 +63,22 @@ class Row {
 
 	function setValue($name, $value = null) {
 		$oProperty = $this->oEntity->findOrCreateProperty($name, ['value' => $value]);
-		if (!$oProperty) throw new \Exception("entity {$this->oEntity->name} hat no property $name");
+		if (!$oProperty) throw new \Exception("entity {$this->oEntity->_name} hat no property $name");
 		if (!is_null($value)) {
-			#bdump($value, $this->oEntity->name.':'.$oProperty->name);
+			#bdump($value, $this->oEntity->_name.':'.$oProperty->name);
 			$this->empty = false;
 		}
 		if ($oProperty->related && !is_null($value) && !is_a($value, __NAMESPACE__.'\Row')) {
-			#bdump($value, $this->oEntity->name.'::'.$oProperty->name);
+			#bdump($value, $this->oEntity->_name.'::'.$oProperty->name);
 			$value = $this->oData->findOrCreateRow($oProperty->related, $value);
-			#throw new \Exception("property {$this->oEntity->name}::$oProperty->name must be a row");
+			#throw new \Exception("property {$this->oEntity->_name}::$oProperty->name must be a row");
 		}
 		$this->aData[$oProperty->name] = is_null($value) ? $oProperty->default : $oProperty->typed($value);
 	}
 
 	function getValue($name) {
 		$oProperty = $this->oEntity->findProperty($name);
-		if (!$oProperty) throw new \Exception("entity {$this->oEntity->name} hat no property $name");
+		if (!$oProperty) throw new \Exception("entity {$this->oEntity->_name} hat no property $name");
 		return isset($this->aData[$oProperty->name]) ? $oProperty->typed($this->aData[$oProperty->name]) : $oProperty->default;
 	}
 
@@ -89,6 +89,6 @@ class Row {
 			$aRet[$name] = $this->aData[$name];
 			if (is_a($aRet[$name], __NAMESPACE__.'\Row')) $aRet[$name] = $aRet[$name]->getIdentity();
 		}
-		return $this->oEntity->name.': '.join(',', $aRet);
+		return $this->oEntity->_name.': '.join(',', $aRet);
 	}
 }

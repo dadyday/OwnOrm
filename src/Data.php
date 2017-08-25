@@ -17,13 +17,13 @@ class Data {
 	function createRow($entity, $aData = [], $aCfg = []) {
 		$oEntity = $this->oModel->findOrCreateEntity($entity, $aCfg);
 		$oRow = $oEntity->createRow($this, $aData);
-		$this->aRow[$oEntity->name][] = $oRow;
+		$this->aRow[$oEntity->_name][] = $oRow;
 		return $oRow;
 	}
 
 	function getRows($entity) {
 		if (!$oEntity = $this->oModel->findEntity($entity)) return [];
-		$aRow = isset($this->aRow[$oEntity->name]) ? $this->aRow[$oEntity->name] : [];
+		$aRow = isset($this->aRow[$oEntity->_name]) ? $this->aRow[$oEntity->_name] : [];
 		return $aRow;
 	}
 
@@ -34,7 +34,7 @@ class Data {
 			$aFilter = array_combine($aField, [$aFilter]);
 		}
 		$aRow = [];
-		foreach ($this->getRows($oEntity->name) as $oRow) {
+		foreach ($this->getRows($oEntity->_name) as $oRow) {
 			$ok = true;
 			foreach ($aFilter as $field => $value) {
 				$ok &= isset($oRow->$field) && $oRow->$field == $value;
@@ -64,7 +64,7 @@ class Data {
 
 	function deleteRow($entity, $row) {
 		if (is_a($row, __NAMESPACE__.'\Row')) {
-			$entity = $row->oEntity->name;
+			$entity = $row->oEntity->_name;
 			$row = array_search($row, $this->aRow[$entity]);
 		}
 
